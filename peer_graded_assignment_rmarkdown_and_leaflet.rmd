@@ -1,0 +1,62 @@
+---
+title: "Peer_graded_Assignment_R_Markdown_and_Leaflet"
+author: "Nille30"
+date: "4/18/2020"
+output: html_document
+---
+
+
+# Instructions
+Create a web page using R Markdown that features a map created with Leaflet.
+
+Host your webpage on either GitHub Pages, RPubs, or NeoCities.
+
+Your webpage must contain the date that you created the document, and it must contain a map created with Leaflet. We would love to see you show off your creativity!
+
+# Review criteria
+The rubric contains the following two questions:
+
+ - Does the web page feature a date and is this date less than two months before the date that you’re grading this assignment?
+ - Does the web page feature an interactive map that appears to have been created with Leaflet?
+ 
+# Project
+
+```{r}
+library(knitr)
+library(leaflet)
+library(dplyr)
+```
+
+## Creating Map with Düsseldorf's sights
+```{r}
+lats <- c(51.217941, 51.247004, 51.191940, 51.220894, 51.223062, 51.225231)
+lngs <- c(6.761680, 6.790519, 6.786190, 6.763635, 6.778837, 6.774734)
+popups <- c("Rheinturm", "University of Applied Sciences Düsseldorf", "Heinrich Heine University", "Kniebrücke", "Königsallee", "Altstadt")
+map <- leaflet() %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addMarkers(lat=lats, lng=lngs, popup=popups)
+map
+#setView(lat=51.217941, lng=6.761680, zoom=13, map=map)
+```
+
+## Map of Düsseldorf's 10 biggest residential districts
+```{r}
+dus <- data.frame(place = 1:10,
+                  lats2 = c(51.202467, 51.201378, 51.211261, 51.238106, 51.230595, 51.187202, 51.240086, 51.229869, 51.254863, 51.266747),
+                  lngs2 = c(6.781539, 6.839106, 6.808304, 6.786798, 6.859689, 6.819558, 6.806745, 6.822925, 6.780862, 6.827959),
+                  districts = c("Bilk", "Eller", "Oberbilk", "Pempelford", "Gerresheim", "Wersten", "Düsseltal", "Flingern Nord", "Derendorf", "Rath"),
+                  population = c(37.275, 30.048, 28.327, 28.022, 28.003, 26.554, 25.907, 21.436, 19.377, 18.737))
+
+dus %>% leaflet() %>% addTiles() %>% addCircleMarkers(weight = 1, radius = sqrt(dus$population) * 5, lat=dus$lats2, lng=dus$lngs2, , popup= paste("Place:", dus$place, "<br>",
+                           "District:", dus$districts, "<br>",
+                           "Population:", dus$population))
+```
+
+
+
+
+
+
+
+
+
